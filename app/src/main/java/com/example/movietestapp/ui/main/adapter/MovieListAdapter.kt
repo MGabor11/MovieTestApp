@@ -5,11 +5,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.movietestapp.POSTER_PATH
 import com.example.movietestapp.R
+import com.example.movietestapp.api.MovieDetailResponse
 import com.example.movietestapp.databinding.ItemMovieBinding
-import com.example.movietestapp.vo.MovieListItem
 
-class MovieListAdapter : ListAdapter<MovieListItem, RecyclerView.ViewHolder>(MovieDiffCallback()) {
+class MovieListAdapter : ListAdapter<MovieDetailResponse, RecyclerView.ViewHolder>(MovieDiffCallback()) {
 
     inner class ViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -25,7 +27,9 @@ class MovieListAdapter : ListAdapter<MovieListItem, RecyclerView.ViewHolder>(Mov
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val viewHolder: ViewHolder = holder as ViewHolder
-        //viewHolder.binding.name = getItem(position).name
+        viewHolder.binding.title = getItem(position).title
+        viewHolder.binding.imagePath = POSTER_PATH + getItem(position).posterPath
+        viewHolder.binding.budget = getItem(position).budget.toString()
     }
 
 }

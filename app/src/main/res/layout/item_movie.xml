@@ -1,19 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-                name="name"
+                name="title"
+                type="String"/>
+        <variable
+                name="imagePath"
+                type="String"/>
+
+        <variable
+                name="budget"
                 type="String"/>
     </data>
-    <LinearLayout
+    <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:padding="@dimen/list_item_padding"
+            android:layout_height="@dimen/list_item_height">
 
-        <TextView android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:gravity="center"
-                  android:text="@{name}"/>
+        <ImageView
+                android:id="@+id/item_movie_poster_iv"
+                android:layout_width="@dimen/list_item_poster_width"
+                android:layout_height="match_parent"
+                app:imageUrl="@{imagePath}"
+        />
 
-    </LinearLayout>
+        <TextView
+                android:layout_toRightOf="@+id/item_movie_poster_iv"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/list_item_title_marginLeft"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@{title}"/>
+
+        <TextView
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@{budget}"/>
+
+    </RelativeLayout>
 </layout>

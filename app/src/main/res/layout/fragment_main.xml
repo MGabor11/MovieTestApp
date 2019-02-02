@@ -4,6 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
         <variable
                 name="viewModel"
                 type="com.example.movietestapp.ui.main.MainViewModel"/>
@@ -19,14 +20,28 @@
             tools:showIn="@layout/activity_main"
             tools:context=".MainActivity">
 
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/please_type_here_the_title_of_the_movie"
+                android:onTextChanged="@{(text, start, before, count) -> viewModel.onQueryChanged(text)}"/>
+
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/main_list_margin_top"
                 android:layout_marginBottom="@dimen/main_list_margin_bottom"
                 app:adapter="@{listAdapter}"
+                android:visibility="@{viewModel.isEmptyLiveData ? View.GONE : View.VISIBLE}"
                 app:list="@{viewModel.responseLiveData}"
 
         />
+
+        <TextView
+                android:visibility="@{viewModel.isEmptyLiveData ? View.VISIBLE : View.GONE}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/empty_list"/>
     </LinearLayout>
 </layout>

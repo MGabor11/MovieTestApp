@@ -5,21 +5,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-
-@BindingAdapter("android:src")
-fun setImageViewResource(imageView: ImageView, resource: Int) {
-    imageView.setImageResource(resource)
-}
-
-/*@BindingAdapter("requestFocus")
-fun requestFocus(moneyEditText: MoneyEditText, requestFocus: Boolean) {
-    if (requestFocus) {
-        val editText = moneyEditText.inputEditText
-        editText.isFocusableInTouchMode = true
-        showKeyBoard(editText)
-    }
-}*/
-
+import com.bumptech.glide.Glide
 
 @BindingAdapter(value = ["adapter", "layoutManager", "list"], requireAll = false)
 fun <T> setRecyclerViewData(
@@ -33,4 +19,9 @@ fun <T> setRecyclerViewData(
         recyclerView.adapter = this
         submitList(list)
     }
+}
+
+@BindingAdapter("imageUrl")
+fun setImageUrl(imageView: ImageView, url: String?) {
+    Glide.with(imageView.context).load(url).into(imageView)
 }
