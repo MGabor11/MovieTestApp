@@ -1,5 +1,7 @@
 package com.example.movietestapp.ui.main
 
+import android.os.Handler
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.movietestapp.api.MovieDetailResponse
@@ -8,22 +10,25 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import io.reactivex.subjects.PublishSubject
-import java.util.concurrent.TimeUnit
-
 
 class MainViewModel @Inject constructor(private val movieRepository: MovieRepository) : ViewModel() {
+
+    companion object {
+        private const val DEFAULT_TYPING_DELAY = 500
+    }
 
     val responseLiveData = MutableLiveData<List<MovieDetailResponse>>()
     val isEmptyLiveData = MutableLiveData<Boolean>()
     var progressCallback: ((Boolean, String?) -> Unit)? = null
     private var compositeDisposable = CompositeDisposable()
+    private val handler = Handler()
+    private var workRunnable: Runnable? = null
 
     init {
         isEmptyLiveData.value = true
     }
 
-    fun getMovies(query: String) {
+    private fun getMovies(query: String) {
         progressCallback?.invoke(true, null)
         val disposable = movieRepository.getMovies(query)
             .subscribeOn(Schedulers.io())
@@ -38,10 +43,18 @@ class MainViewModel @Inject constructor(private val movieRepository: MovieReposi
     }
 
     fun onQueryChanged(query: CharSequence) {
-        getMovies(query.toString())
+        workRunnable?.let { handler.removeCallbacks(it) }
+        if (!TextUtils.isEmpty(query)) {
+            workRunnable = Runnable { getMovies(query.toString()) }
+            handler.postDelayed(workRunnable, DEFAULT_TYPING_DELAY.toLong())
+        } else {
+            responseLiveData.value = ArrayList()
+            isEmptyLiveData.value = true
+        }
     }
 
     override fun onCleared() {
+        handler.removeCallbacks(workRunnable)
         compositeDisposable.dispose()
         super.onCleared()
     }

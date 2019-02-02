@@ -22,6 +22,7 @@
                 android:id="@+id/item_movie_poster_iv"
                 android:layout_width="@dimen/list_item_poster_width"
                 android:layout_height="match_parent"
+                android:scaleType="centerInside"
                 app:imageUrl="@{imagePath}"
         />
 
